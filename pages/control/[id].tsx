@@ -2,21 +2,18 @@ import { useRouter } from "next/router";
 import { usePubNub } from "pubnub-react";
 import { useEffect, useState } from "react";
 import PubNub from "pubnub";
-
-type Scene = { type: "choice"; options: string[] };
+import { Message } from "../../types";
 
 export default function ControlPage() {
     const router = useRouter();
     const pubnub = usePubNub();
     const id = router.query.id;
-    const [scene, setScene] = useState<Scene | null>(null);
+    const [lastMessage, setLastMessage] = useState<Message | null>(null);
 
     useEffect(() => {
         function onMessage(ev: PubNub.MessageEvent) {
-            console.log("ev", ev);
-            if (ev.message.type === "scene") {
-                setScene(ev.message.scene);
-            }
+            console.log("Receive", ev.message);
+            setLastMessage(ev.message);
         }
 
         if (id) {
@@ -36,7 +33,7 @@ export default function ControlPage() {
 
     return (
         <main style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-            <pre>{JSON.stringify(scene, null, 2)}</pre>
+            <pre>{JSON.stringify(lastMessage, null, 2)}</pre>
         </main>
     );
 }
