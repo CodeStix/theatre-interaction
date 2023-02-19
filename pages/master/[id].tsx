@@ -10,6 +10,8 @@ export default function ControlPage() {
     const id = router.query.id;
     const [options, setOptions] = useState(["", ""]);
     const [title, setTitle] = useState("Choose what should happen:");
+    const [time, setTime] = useState("30");
+    const [voterCount, setVoterCount] = useState("6");
 
     function sendMessage(value: Message) {
         console.log("Send", value);
@@ -24,11 +26,25 @@ export default function ControlPage() {
             <form
                 onSubmit={(ev) => {
                     ev.preventDefault();
-                    sendMessage({ type: "choice", options: options, title: title });
+                    sendMessage({ type: "choice", options: options, title: title, time: parseFloat(time), voterCount: parseInt(voterCount) });
                 }}>
                 <div style={{ padding: "0.2rem" }}>
                     <label htmlFor="title">Title</label>
                     <textarea style={{ marginLeft: "0.2rem" }} id="title" rows={5} value={title} onChange={(ev) => setTitle(ev.target.value)} />
+                </div>
+                <div style={{ padding: "0.2rem" }}>
+                    <label htmlFor="time">Seconds to vote</label>
+                    <input type="number" value={time} style={{ marginLeft: "0.2rem" }} id="time" onChange={(ev) => setTime(ev.target.value)} />
+                </div>
+                <div style={{ padding: "0.2rem" }}>
+                    <label htmlFor="voterCount">Voter count</label>
+                    <input
+                        type="number"
+                        value={voterCount}
+                        style={{ marginLeft: "0.2rem" }}
+                        id="voterCount"
+                        onChange={(ev) => setVoterCount(ev.target.value)}
+                    />
                 </div>
                 {options.map((option, i) => (
                     <div key={i} style={{ padding: "0.2rem" }}>
