@@ -20,9 +20,13 @@ export default function Home() {
     return (
         <main
             style={{ background: "black", display: "flex", justifyContent: "center", alignItems: "center", height: "100%", flexDirection: "column" }}>
-            <QRCodeSVG style={{ border: "1rem solid white" }} width="400px" height="400px" value={url} />
-            <p style={{ fontSize: "3rem", marginTop: "2rem", fontWeight: "bold" }}>Scan the QR code to control the show!</p>
-            {/* <pre style={{ fontSize: "3rem" }}>{url}</pre> */}
+            {url && (
+                <>
+                    <QRCodeSVG style={{ border: "1rem solid white" }} width="400px" height="400px" value={url} />
+                    <p style={{ fontSize: "3rem", marginTop: "2rem", fontWeight: "bold" }}>Scan the QR code to control the show!</p>
+                    {/* <pre style={{ fontSize: "3rem" }}>{url}</pre> */}
+                </>
+            )}
         </main>
     );
 }
