@@ -9,6 +9,7 @@ export default function ControlPage() {
     const pubnub = usePubNub();
     const id = router.query.id;
     const [options, setOptions] = useState(["", ""]);
+    const [title, setTitle] = useState("Choose what should happen:");
 
     function sendMessage(value: Message) {
         console.log("Send", value);
@@ -23,15 +24,19 @@ export default function ControlPage() {
             <form
                 onSubmit={(ev) => {
                     ev.preventDefault();
-                    sendMessage({ type: "choice", options: options });
+                    sendMessage({ type: "choice", options: options, title: title });
                 }}>
+                <div style={{ padding: "0.2rem" }}>
+                    <label htmlFor="title">Title</label>
+                    <textarea style={{ marginLeft: "0.2rem" }} id="title" rows={5} value={title} onChange={(ev) => setTitle(ev.target.value)} />
+                </div>
                 {options.map((option, i) => (
                     <div key={i} style={{ padding: "0.2rem" }}>
                         <label htmlFor={"option-" + i}>Option {i + 1}</label>
-                        <input
+                        <textarea
+                            rows={5}
                             style={{ marginLeft: "0.2rem" }}
                             id={"option-" + i}
-                            type="text"
                             value={option}
                             onChange={(ev) => {
                                 let copy = [...options];
