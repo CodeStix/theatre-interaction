@@ -33,10 +33,6 @@ export default function ControlPage() {
             if (m.type === "choice" || m.type === "clear") {
                 setLastMessage(m);
             }
-
-            if (m.type === "choice") {
-                navigator.vibrate(200);
-            }
         }
 
         if (id) {

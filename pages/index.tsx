@@ -17,7 +17,7 @@ export default function Home() {
 
             let params = new URLSearchParams(window.location.search);
 
-            let url = `${params.has("i") ? params.get("i") : location.href}/control/${id}`;
+            let url = params.has("i") ? params.get("i")! : `${location.href}/control/${id}`;
             setUrl(url);
             console.log(url);
         }
