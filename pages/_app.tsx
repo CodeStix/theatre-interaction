@@ -9,6 +9,10 @@ const pubnub = new PubNub({
     uuid: process.env.NEXT_PUBLIC_UUID!,
 });
 
+// if (typeof window !== "undefined") {
+//     pubnub.setUUID(window.crypto.randomUUID());
+// }
+
 export default function App({ Component, pageProps }: AppProps) {
     return (
         <PubNubProvider client={pubnub}>

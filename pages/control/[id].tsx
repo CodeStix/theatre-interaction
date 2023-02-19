@@ -2,14 +2,26 @@ import { useRouter } from "next/router";
 import { usePubNub } from "pubnub-react";
 import React, { useEffect, useState } from "react";
 import PubNub from "pubnub";
-import { Message } from "../../types";
+import { Message, BUTTON_COLORS } from "../../types";
 
-const BUTTON_COLORS = ["#2a8cda", "#d3d30b", "blue", "red"];
+function useUserId() {
+    if (typeof window === "undefined") {
+        return "";
+    }
+
+    let userId = localStorage.getItem("userId");
+    if (!userId) {
+        userId = window.crypto.randomUUID();
+        localStorage.setItem("userId", userId);
+    }
+    return userId;
+}
 
 export default function ControlPage() {
     const router = useRouter();
     const pubnub = usePubNub();
     const id = router.query.id;
+    const userId = useUserId();
     const [lastMessage, setLastMessage] = useState<Message>({ type: "clear" });
 
     useEffect(() => {
@@ -17,7 +29,9 @@ export default function ControlPage() {
             console.log("Receive", ev.message);
 
             let m = ev.message as Message;
-            setLastMessage(m);
+            if (m.type === "choice" || m.type === "clear") {
+                setLastMessage(m);
+            }
 
             if (m.type === "choice") {
                 navigator.vibrate(200);
@@ -45,7 +59,19 @@ export default function ControlPage() {
                 <>
                     <h2 style={{ padding: "0.5rem", fontSize: "2rem" }}>{lastMessage.title}</h2>
                     {lastMessage.options.map((option, i) => (
-                        <ChoiceButton key={i} color={BUTTON_COLORS[i]}>
+                        <ChoiceButton
+                            key={i}
+                            color={BUTTON_COLORS[i]}
+                            onClick={() => {
+                                pubnub.publish({
+                                    channel: `room-${id}`,
+                                    message: {
+                                        type: "vote",
+                                        option: option,
+                                        userId: userId,
+                                    } as Message,
+                                });
+                            }}>
                             {option}
                         </ChoiceButton>
                     ))}
@@ -58,14 +84,14 @@ export default function ControlPage() {
                     <p>Watch the show!</p>
                 </div>
             )}
-            {/* <pre>{JSON.stringify(lastMessage, null, 2)}</pre> */}
         </main>
     );
 }
 
-function ChoiceButton(props: { children?: React.ReactNode; color: string }) {
+function ChoiceButton(props: { children?: React.ReactNode; color: string; onClick: () => void }) {
     return (
         <button
+            onClick={props.onClick}
             style={{
                 flexGrow: 1,
                 width: "100%",
