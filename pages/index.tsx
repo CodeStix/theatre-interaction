@@ -4,6 +4,7 @@ import { Inter } from "@next/font/google";
 import styles from "@/styles/Home.module.css";
 import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useState } from "react";
+import { nanoid } from "nanoid";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,8 +13,13 @@ export default function Home() {
 
     useEffect(() => {
         if (typeof window !== "undefined") {
-            const id = crypto.randomUUID();
-            setUrl(`${location.href}/control/${id}`);
+            const id = nanoid();
+
+            let params = new URLSearchParams(window.location.search);
+
+            let url = `${params.has("i") ? params.get("i") : location.href}/control/${id}`;
+            setUrl(url);
+            console.log(url);
         }
     }, []);
 

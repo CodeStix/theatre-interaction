@@ -3,6 +3,7 @@ import { usePubNub } from "pubnub-react";
 import React, { useEffect, useState } from "react";
 import PubNub from "pubnub";
 import { Message, BUTTON_COLORS } from "../../types";
+import { nanoid } from "nanoid";
 
 function useUserId() {
     if (typeof window === "undefined") {
@@ -11,7 +12,7 @@ function useUserId() {
 
     let userId = localStorage.getItem("userId");
     if (!userId) {
-        userId = window.crypto.randomUUID();
+        userId = nanoid();
         localStorage.setItem("userId", userId);
     }
     return userId;

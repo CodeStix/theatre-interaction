@@ -1,5 +1,5 @@
 export type Message =
-    | { type: "choice"; title: string; options: string[]; time: number, voterCount: number }
+    | { type: "choice"; title: string; options: string[]; time: number; voterCount: number }
     | { type: "clear" }
     | { type: "vote"; userId: string; option: string };
 
