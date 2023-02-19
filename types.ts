@@ -3,4 +3,4 @@ export type Message =
     | { type: "clear" }
     | { type: "vote"; userId: string; option: string };
 
-export const BUTTON_COLORS = ["#2a8cda", "#d3d30b", "blue", "red"];
+export const BUTTON_COLORS = ["#000000", "#d3d30b", "blue", "red"];
