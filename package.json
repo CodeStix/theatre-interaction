@@ -14,6 +14,7 @@
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
     "chart.js": "^4.2.1",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "next": "13.1.6",
     "pubnub": "^7.2.2",
     "pubnub-react": "^3.0.2",

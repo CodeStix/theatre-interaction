@@ -5,10 +5,11 @@ import PubNub from "pubnub";
 import { BUTTON_COLORS, Message } from "../../types";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 
 type VoteMap = { [option: string]: string[] };
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartDataLabels);
 
 export default function ControlPage() {
     const router = useRouter();
@@ -76,7 +77,36 @@ export default function ControlPage() {
                     <h2 style={{ padding: "0.5rem", fontSize: "2rem" }}>{title}</h2>
 
                     <Bar
-                        options={{ responsive: true, indexAxis: "y" }}
+                        style={{ padding: "1rem" }}
+                        plugins={[ChartDataLabels]}
+                        options={{
+                            // responsive: true,
+                            indexAxis: "y",
+                            plugins: {
+                                datalabels: {
+                                    anchor: "end",
+                                    align: "right",
+                                    formatter: Math.round,
+                                    color: "white",
+                                    font: {
+                                        weight: "bold",
+                                        size: 50,
+                                    },
+                                },
+                                legend: {
+                                    display: false,
+                                },
+                            },
+
+                            scales: {
+                                x: {
+                                    display: false,
+                                },
+                            },
+                            layout: {
+                                padding: 50,
+                            },
+                        }}
                         data={{
                             labels: Object.keys(votes),
                             datasets: [
@@ -89,16 +119,10 @@ export default function ControlPage() {
                             ],
                         }}
                     />
-
-                    {/* {lastMessage.options.map((option, i) => (
-                        <ChoiceButton key={i} color={BUTTON_COLORS[i]}>
-                            {option}
-                        </ChoiceButton>
-                    ))} */}
                 </>
             )}
 
-            <pre>
+            {/* <pre>
                 {JSON.stringify(
                     {
                         title,
@@ -108,7 +132,7 @@ export default function ControlPage() {
                     null,
                     2
                 )}
-            </pre>
+            </pre> */}
         </main>
     );
 }
